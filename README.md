@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MossKeep
 
-## Getting Started
+A Next.js application with Supabase authentication and Drizzle ORM.
 
-First, run the development server:
+## Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+
+- A Supabase project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Install dependencies**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Configure environment variables**
 
-To learn more about Next.js, take a look at the following resources:
+   Copy the example environment file and fill in your Supabase credentials:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cp .env.example .env.local
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Required variables:
+   - `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+   - `DATABASE_URL` - Your Supabase PostgreSQL connection string
 
-## Deploy on Vercel
+3. **Set up the database**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   Generate migrations from the schema:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run db:generate
+   ```
+
+   Apply migrations to your database:
+
+   ```bash
+   npm run db:migrate
+   ```
+
+   Or push schema directly (for development):
+
+   ```bash
+   npm run db:push
+   ```
+
+4. **Add foreign key constraint for Supabase auth**
+
+   Run this SQL in your Supabase SQL Editor to link the users table to Supabase auth:
+
+   ```sql
+   ALTER TABLE public.users
+   ADD CONSTRAINT users_user_id_fkey
+   FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+   ```
+
+5. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Database Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run db:generate` | Generate migrations from schema |
+| `npm run db:migrate` | Apply migrations to database |
+| `npm run db:push` | Push schema directly (dev only) |
+| `npm run db:studio` | Open Drizzle Studio GUI |
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org) - React framework
+- [Supabase](https://supabase.com) - Authentication and PostgreSQL database
+- [Drizzle ORM](https://orm.drizzle.team) - TypeScript ORM
+- [Tailwind CSS](https://tailwindcss.com) - Styling
