@@ -11,6 +11,10 @@ export const users = pgTable("users", {
 
 export const contacts = pgTable("contacts", {
   contactId: uuid("contact_id").primaryKey().defaultRandom(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
   amount: numeric("amount", { precision: 12, scale: 2 }),
   status: text("status"),
   loanType: text("loan_type"),
