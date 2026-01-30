@@ -2,11 +2,16 @@
 
 import { db } from "@/db";
 import { contacts } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export async function getContacts() {
-  const allContacts = await db.select().from(contacts).orderBy(contacts.createdAt);
-  return allContacts;
+export async function getContactById(contactId: string) {
+  const result = await db
+    .select()
+    .from(contacts)
+    .where(eq(contacts.contactId, contactId))
+    .limit(1);
+  return result[0] || null;
 }
 
 export async function createContact(formData: FormData) {
@@ -28,6 +33,39 @@ export async function createContact(formData: FormData) {
     status: status || "active",
   });
 
+  revalidatePath("/contacts");
+  return { success: true };
+}
+
+export async function updateContact(contactId: string, formData: FormData) {
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  const email = formData.get("email") as string | null;
+  const phone = formData.get("phone") as string | null;
+  const status = formData.get("status") as string | null;
+
+  if (!firstName || !lastName) {
+    return { error: "First name and last name are required" };
+  }
+
+  await db
+    .update(contacts)
+    .set({
+      firstName,
+      lastName,
+      email: email || null,
+      phone: phone || null,
+      status: status || "active",
+      updatedAt: new Date(),
+    })
+    .where(eq(contacts.contactId, contactId));
+
+  revalidatePath("/contacts");
+  return { success: true };
+}
+
+export async function deleteContact(contactId: string) {
+  await db.delete(contacts).where(eq(contacts.contactId, contactId));
   revalidatePath("/contacts");
   return { success: true };
 }
