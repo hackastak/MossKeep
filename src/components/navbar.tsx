@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
   { href: "/contacts", label: "Contacts" },
@@ -40,6 +41,7 @@ export function Navbar() {
               })}
             </div>
           </div>
+          <ThemeToggle />
         </div>
       </div>
     </nav>
