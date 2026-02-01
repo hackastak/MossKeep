@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
+import { UserDropdown } from "./user-dropdown";
 
 const navLinks = [
   { href: "/contacts", label: "Contacts" },
 ];
 
-export function Navbar() {
+export function Navbar({ demoModeEnabled }: { demoModeEnabled: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -41,7 +42,10 @@ export function Navbar() {
               })}
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <UserDropdown demoModeEnabled={demoModeEnabled} />
+          </div>
         </div>
       </div>
     </nav>

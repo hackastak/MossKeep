@@ -5,9 +5,10 @@ import { toggleDemoMode } from "./actions";
 
 interface DemoModeToggleProps {
   initialEnabled: boolean;
+  showLabel?: boolean;
 }
 
-export function DemoModeToggle({ initialEnabled }: DemoModeToggleProps) {
+export function DemoModeToggle({ initialEnabled, showLabel = true }: DemoModeToggleProps) {
   const [enabled, setEnabled] = useState(initialEnabled);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,7 @@ export function DemoModeToggle({ initialEnabled }: DemoModeToggleProps) {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-zinc-600 dark:text-zinc-400">Demo Mode</span>
+      {showLabel && <span className="text-sm text-zinc-600 dark:text-zinc-400">Demo Mode</span>}
       <button
         type="button"
         role="switch"
