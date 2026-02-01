@@ -7,6 +7,8 @@ import {
   type TaskWithContact,
 } from "./actions";
 import { CompleteTaskButton } from "./complete-task-button";
+import { DemoModeToggle } from "./demo-mode/demo-mode-toggle";
+import { getDemoModeStatus } from "./demo-mode/actions";
 
 function formatRelativeDate(date: Date): string {
   const now = new Date();
@@ -140,11 +142,12 @@ function TaskSection({
 }
 
 export default async function DashboardPage() {
-  const [stats, overdueTasks, todayTasks, upcomingTasks] = await Promise.all([
+  const [stats, overdueTasks, todayTasks, upcomingTasks, demoModeEnabled] = await Promise.all([
     getDashboardStats(),
     getOverdueTasks(),
     getTasksDueToday(),
     getUpcomingTasks(),
+    getDemoModeStatus(),
   ]);
 
   const hasNoTasks =
@@ -154,9 +157,12 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-        Welcome back
-      </h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          Welcome back
+        </h1>
+        <DemoModeToggle initialEnabled={demoModeEnabled} />
+      </div>
 
       {/* Stats Grid */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">

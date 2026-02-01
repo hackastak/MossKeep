@@ -1,4 +1,4 @@
-import { numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -6,6 +6,7 @@ export const users = pgTable("users", {
   teamId: uuid("team_id"),
   name: text("name"),
   email: text("email").notNull(),
+  demoModeEnabled: boolean("demo_mode_enabled").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -22,6 +23,7 @@ export const contacts = pgTable("contacts", {
   amount: numeric("amount", { precision: 12, scale: 2 }),
   status: text("status"),
   loanType: text("loan_type"),
+  isDemo: boolean("is_demo").default(false).notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -33,6 +35,7 @@ export const loans = pgTable("loans", {
   amount: numeric("amount", { precision: 12, scale: 2 }),
   status: text("status"),
   loanType: text("loan_type"),
+  isDemo: boolean("is_demo").default(false).notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -46,6 +49,7 @@ export const tasks = pgTable("tasks", {
   status: text("status"),
   contactId: uuid("contact_id").references(() => contacts.contactId),
   loanId: uuid("loan_id").references(() => loans.id),
+  isDemo: boolean("is_demo").default(false).notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   completedAt: timestamp("completed_at"),
