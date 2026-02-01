@@ -15,6 +15,13 @@
       "when": 1769718322710,
       "tag": "0001_mixed_medusa",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769917237303,
+      "tag": "0002_slow_master_mold",
+      "breakpoints": true
     }
   ]
 }

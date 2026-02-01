@@ -19,6 +19,10 @@ export async function createContact(formData: FormData) {
   const lastName = formData.get("lastName") as string;
   const email = formData.get("email") as string | null;
   const phone = formData.get("phone") as string | null;
+  const address = formData.get("address") as string | null;
+  const city = formData.get("city") as string | null;
+  const state = formData.get("state") as string | null;
+  const zipCode = formData.get("zipCode") as string | null;
   const status = formData.get("status") as string | null;
 
   if (!firstName || !lastName) {
@@ -30,6 +34,10 @@ export async function createContact(formData: FormData) {
     lastName,
     email: email || null,
     phone: phone || null,
+    address: address || null,
+    city: city || null,
+    state: state || null,
+    zipCode: zipCode || null,
     status: status || "active",
   });
 
@@ -42,6 +50,10 @@ export async function updateContact(contactId: string, formData: FormData) {
   const lastName = formData.get("lastName") as string;
   const email = formData.get("email") as string | null;
   const phone = formData.get("phone") as string | null;
+  const address = formData.get("address") as string | null;
+  const city = formData.get("city") as string | null;
+  const state = formData.get("state") as string | null;
+  const zipCode = formData.get("zipCode") as string | null;
   const status = formData.get("status") as string | null;
 
   if (!firstName || !lastName) {
@@ -55,12 +67,17 @@ export async function updateContact(contactId: string, formData: FormData) {
       lastName,
       email: email || null,
       phone: phone || null,
+      address: address || null,
+      city: city || null,
+      state: state || null,
+      zipCode: zipCode || null,
       status: status || "active",
       updatedAt: new Date(),
     })
     .where(eq(contacts.contactId, contactId));
 
   revalidatePath("/contacts");
+  revalidatePath(`/contacts/${contactId}`);
   return { success: true };
 }
 

@@ -59,7 +59,7 @@ function TaskRow({
         <div className="mt-1 flex items-center gap-2 text-sm">
           {contactName && task.contactId ? (
             <Link
-              href={`/contacts/${task.contactId}/edit`}
+              href={`/contacts/${task.contactId}`}
               className="text-zinc-600 hover:text-zinc-900 hover:underline dark:text-zinc-400 dark:hover:text-zinc-100"
             >
               {contactName}

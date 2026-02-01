@@ -250,8 +250,13 @@ export default async function ContactsPage({ searchParams }: ContactsPageProps) 
                   key={contact.contactId}
                   className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
                 >
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    {contact.firstName} {contact.lastName}
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                    <Link
+                      href={`/contacts/${contact.contactId}`}
+                      className="text-zinc-900 hover:text-zinc-600 hover:underline dark:text-zinc-100 dark:hover:text-zinc-300"
+                    >
+                      {contact.firstName} {contact.lastName}
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-zinc-600 dark:text-zinc-400">
                     {contact.email || "-"}
