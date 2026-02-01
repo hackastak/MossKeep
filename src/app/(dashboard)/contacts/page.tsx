@@ -57,16 +57,16 @@ async function getContacts(
     conditions.push(eq(contacts.status, statusFilter));
   }
 
-  let query = db.select().from(contacts);
+  const baseQuery = db.select().from(contacts).$dynamic();
 
   if (conditions.length > 0) {
     const whereClause = conditions.length === 1
       ? conditions[0]
       : and(...conditions);
-    query = query.where(whereClause).$dynamic();
+    return await baseQuery.where(whereClause).orderBy(orderBy);
   }
 
-  return await query.orderBy(orderBy);
+  return await baseQuery.orderBy(orderBy);
 }
 
 function SortableHeader({
