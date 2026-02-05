@@ -23,6 +23,7 @@ export const contacts = pgTable("contacts", {
   amount: numeric("amount", { precision: 12, scale: 2 }),
   status: text("status"),
   loanType: text("loan_type"),
+  notes: text("notes"),
   isDemo: boolean("is_demo").default(false).notNull(),
   userId: uuid("user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),

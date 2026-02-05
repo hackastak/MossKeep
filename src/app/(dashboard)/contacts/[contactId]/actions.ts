@@ -73,3 +73,31 @@ export async function deleteTask(taskId: string, contactId: string) {
   revalidatePath("/");
   return { success: true };
 }
+
+export type NotesFormState = {
+  success?: boolean;
+  error?: string;
+} | null;
+
+export async function updateContactNotes(
+  contactId: string,
+  _prevState: NotesFormState,
+  formData: FormData
+): Promise<NotesFormState> {
+  const notes = formData.get("notes") as string;
+
+  try {
+    await db
+      .update(contacts)
+      .set({
+        notes: notes || null,
+        updatedAt: new Date(),
+      })
+      .where(eq(contacts.contactId, contactId));
+
+    revalidatePath(`/contacts/${contactId}`);
+    return { success: true };
+  } catch {
+    return { success: false, error: "Failed to update notes" };
+  }
+}

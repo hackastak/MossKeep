@@ -38,22 +38,35 @@ export async function getUserProfile() {
   return newUser[0];
 }
 
-export async function updateUserProfile(formData: FormData) {
+export type ProfileFormState = {
+  success?: boolean;
+  error?: string;
+} | null;
+
+export async function updateUserProfile(
+  _prevState: ProfileFormState,
+  formData: FormData
+): Promise<ProfileFormState> {
   const supabase = await createClient();
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser();
 
   if (!authUser) {
-    throw new Error("Not authenticated");
+    return { success: false, error: "Not authenticated" };
   }
 
   const name = formData.get("name") as string;
 
-  await db
-    .update(users)
-    .set({ name })
-    .where(eq(users.userId, authUser.id));
+  try {
+    await db
+      .update(users)
+      .set({ name })
+      .where(eq(users.userId, authUser.id));
 
-  revalidatePath("/settings/profile");
+    revalidatePath("/settings/profile");
+    return { success: true };
+  } catch {
+    return { success: false, error: "Failed to update profile" };
+  }
 }

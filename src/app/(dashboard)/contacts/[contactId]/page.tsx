@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getContactById } from "../actions";
 import { getLoansByContactId, getTasksByContactId } from "./actions";
 import { CreateTaskModal } from "./create-task-modal";
+import { NotesEditor } from "./notes-editor";
 import { TaskActions } from "./task-actions";
 
 function formatCurrency(amount: string | null): string {
@@ -109,6 +110,14 @@ export default async function ContactDetailPage({
             <p className="text-zinc-900 dark:text-zinc-100">{fullAddress}</p>
           </div>
         )}
+      </div>
+
+      {/* Notes Section */}
+      <div className="mb-6 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+          Notes
+        </h2>
+        <NotesEditor contactId={contactId} initialNotes={contact.notes} />
       </div>
 
       {/* Loans Table */}
